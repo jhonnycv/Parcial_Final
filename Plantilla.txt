@@ -1,0 +1,96 @@
+#plsql.execute <<-SQL
+
+create table amortizacion (
+  numero_cuota integer,
+  cuota_mensual decimal(15,2),
+  abono_capital decimal(15,2),
+  abono_interes decimal(15,2),
+  saldo decimal(15,2)
+)
+
+CREATE OR REPLACE PROCEDURE CALCULAR_SIMULACION(TASAN IN DECIMAL,NCUOTAS IN INTEGER,VALORPRESTAMO IN DECIMAL) IS
+TASA DECIMAL(15,4);
+TOTAL_CUOTAS DECIMAL(15,2);
+VALOR_PRESTAMO DECIMAL(15,2); 
+ABONO_CAPITAL DECIAML(15,2);
+ABONO_INTERESES DECIMAL(15,4);
+VALOR_CUOTA_MENSUAL DECIMAL(15,4);
+I INTEGER ;
+BEGIN
+FOR I IN 1..NCUOTAS LOOP
+TASA := (TASAN/100);
+VALOR_CUOTA_MENSUAL := (TASA *VALORPRESTAMO)/(1-(1+TASA)**(-NCUOTAS));
+
+END LOOP;
+END;
+
+
+CREATE VIEW PLAN_AMORTIZACION AS
+SELECT ABONO_CAPITAL,ABONO_INTERES,CUOTA_MENSUAL,NUMERO_CUOTA,SALDO, (COUNT(numero_cuota)/SUM(ABONO_INTERES))
+FROM amortizacion 
+GROUP BY ABONO_CAPITAL,ABONO_INTERES,CUOTA_MENSUAL,NUMERO_CUOTA,SALDO
+ORDER BY numero_cuota ASC  ;
+
+#SQL
+
+
+#plsql.execute <<-SQL
+CREATE TYPE number_array AS VARRAY(50) OF INTEGER
+
+Type Array_1 Is varray(8) of Number(10);
+Type Array_2 Is varray(8) of Number(10);
+
+Array_A Array_1 := Array_1(1, 2, 4, 8, 16, 22, 26, 38, 62, 74, 102, 104, 108, 116, 122);
+Array_B Array_2 := Array_2(3, 6, 12, 14, 18, 26, 38, 62, 74, 102, 104, 108, 116, 122);
+
+lb_Existe Boolean := False;
+Ln_Cuadrado Number:=0;
+BEGIN
+    For Ln_Index In 1..6 Loop
+        Ln_Cuadrado:=Array_A(Ln_Index) * Array_A(Ln_Index);
+                  Case Ln_Index
+                    When  1 Then
+                       If Ln_Cuadrado = Array_B(Ln_Index) Then
+                        lb_Existe:=True; 
+                       End IF;
+                    When  2 Then
+                        If Ln_Cuadrado = Array_B(Ln_Index) Then
+                        lb_Existe:=True;
+                        End If;
+                    When  3 Then
+                        If Ln_Cuadrado = Array_B(Ln_Index) Then
+                        lb_Existe:=True;
+                        End IF;
+                    When  4 Then
+                        If Ln_Cuadrado = Array_B(Ln_Index) Then
+                        lb_Existe:=True;
+                        End IF;
+                    When  6 Then
+                        If Ln_Cuadrado = Array_B(Ln_Index) Then
+                        lb_Existe:=True;
+                        End IF;
+                    When  7 Then
+                        If Ln_Cuadrado = Array_B(Ln_Index) Then
+                        lb_Existe:=True;
+                        End IF;
+                    When  8 Then
+                        If Ln_Cuadrado = Array_B(Ln_Index) Then
+                             lb_Existe:=True;
+                        End IF;
+                    Else
+                        Exit;
+            End Case;                      
+    End Loop;
+    
+    Return lb_Existe;
+END
+
+#SQL
+
+
+
+#plsql.execute <<-SQL
+
+
+
+#SQL
